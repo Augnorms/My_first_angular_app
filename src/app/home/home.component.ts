@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SelectFieldComponent } from '../reusable/select-field/select-field.component';
 import { CheckboxComponent } from '../reusable/checkbox/checkbox.component';
+import { TextAreaComponent } from '../reusable/text-area/text-area.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [InputFieldComponent, SelectFieldComponent, CheckboxComponent, CommonModule, FormsModule],
+  imports: [TextAreaComponent, InputFieldComponent, SelectFieldComponent, CheckboxComponent, CommonModule, FormsModule],
   template: `
     <div class="w-full h-screen border">
       <div *ngFor="let val of fields; let idx = index">
@@ -42,14 +43,23 @@ import { CheckboxComponent } from '../reusable/checkbox/checkbox.component';
       <div>
         <app-checkbox 
         [isChecked]="checked"
-         (modelChange)="handleCheck($event)"
+         (checkmodelChange)="handleCheck($event)"
+        />
+      </div>
+
+      <div>
+        <app-text-area 
+         label="Comment"
+         placeholder="Enter text here..."
+         [model]="textvalue"
+         (modelChange)="handleTextChange($event)"
         />
       </div>
 
       <button (click)="click()" class="w-[10%] p-2 rounded border">
         click
       </button>
-      <button (click)="onEdit('augustine', 'normanyo', '1')" class="w-[10%] p-2 rounded border ml-1">
+      <button (click)="onEdit('augustine', 'normanyo', '1', true)" class="w-[10%] p-2 rounded border ml-1">
         edit
       </button>
     </div>
@@ -60,15 +70,17 @@ export class HomeComponent {
   placeholderData = ['Enter firstname', 'Enter lastname'];
   labelData = ['Firstname', 'Lastname'];
   identifyData = ['firstname', 'lastname'];
-
   modelvalues = ['', ''];
+
   selectModel = ''
   selctobject:{ itemId: number; itemName: string } = {
     itemId: 0,
     itemName: ''
   } 
 
-  checked = true;
+  checked = false;
+
+  textvalue = "";
 
   constructor() {}
 
@@ -77,7 +89,9 @@ export class HomeComponent {
       'firstname': this.modelvalues[0],
       'lastname:': this.modelvalues[1],
       'select': this.selectModel,
-      'selectoptions': this.selctobject
+      'selectoptions': this.selctobject,
+      'checked': this.checked,
+      'text': this.textvalue
     });
     this.reset();
   }
@@ -103,11 +117,16 @@ export class HomeComponent {
    this.checked = event;
   }
 
+  handleTextChange(event:{ value: string; identity: string }){
+    this.textvalue = event.value;
+  }
+
   //simulate edit
-  onEdit(firstname:string, lastname:string, gender:string){
+  onEdit(firstname:string, lastname:string, gender:string, check:boolean){
     this.modelvalues[0] = firstname;
     this.modelvalues[1]  = lastname;
     this.selectModel = gender;
+    this.checked = check;
   }
 
   reset(){
@@ -115,6 +134,8 @@ export class HomeComponent {
       this.modelvalues[index] = '';
     });
     this.selectModel = '';
+    this.checked=false;
+    this.textvalue = "";
   }
 
   ngOnInit() {}

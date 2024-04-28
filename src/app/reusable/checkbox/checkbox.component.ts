@@ -33,11 +33,11 @@ export class CheckboxComponent {
   @Input() fieldId!: string;
   @Input() label: string = 'yes / no';
   @Input() isChecked!: boolean;
-  @Output() modelChange = new EventEmitter<boolean>();
+  @Output() checkmodelChange = new EventEmitter<boolean>();
 
   onInputChange(event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
-    this.modelChange.emit(checked);
+    this.checkmodelChange.emit(checked);
   }
 
   // ngOnChanges(changes: any) {
