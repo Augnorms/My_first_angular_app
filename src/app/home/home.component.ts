@@ -3,10 +3,11 @@ import { InputFieldComponent } from '../reusable/input-field/input-field.compone
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SelectFieldComponent } from '../reusable/select-field/select-field.component';
+import { CheckboxComponent } from '../reusable/checkbox/checkbox.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [InputFieldComponent, SelectFieldComponent, CommonModule, FormsModule],
+  imports: [InputFieldComponent, SelectFieldComponent, CheckboxComponent, CommonModule, FormsModule],
   template: `
     <div class="w-full h-screen border">
       <div *ngFor="let val of fields; let idx = index">
@@ -27,6 +28,7 @@ import { SelectFieldComponent } from '../reusable/select-field/select-field.comp
 
       <div>
        <app-select-field 
+        [label]="'Gender'"
         [data]="[
           {itemId:1, itemName:'Male'},
           {itemId:2, itemName:'Female'}
@@ -35,6 +37,13 @@ import { SelectFieldComponent } from '../reusable/select-field/select-field.comp
         (modelChange)="handleSelect($event)"
         (selectChange)="onSelected($event)"
        />
+      </div>
+
+      <div>
+        <app-checkbox 
+        [isChecked]="checked"
+         (modelChange)="handleCheck($event)"
+        />
       </div>
 
       <button (click)="click()" class="w-[10%] p-2 rounded border">
@@ -58,6 +67,8 @@ export class HomeComponent {
     itemId: 0,
     itemName: ''
   } 
+
+  checked = true;
 
   constructor() {}
 
@@ -86,6 +97,10 @@ export class HomeComponent {
 
   onSelected(event:{ itemId: number; itemName: string }){
     this.selctobject = event
+  }
+
+  handleCheck(event: boolean){
+   this.checked = event;
   }
 
   //simulate edit
